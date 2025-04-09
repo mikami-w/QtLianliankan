@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/img/fruit_bg.bmp</file>
+        <file>res/img/fruit_element.bmp</file>
+        <file>res/img/fruit_mask.bmp</file>
+        <file>res/img/llk_main.bmp</file>
+        <file>res/icon/LLK.ico</file>
+    </qresource>
+</RCC>
