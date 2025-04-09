@@ -20,13 +20,10 @@ public:
     void changeToThis() override;
 
     void bindGameMap(GameMap *map) { gameMapWeak = map; }
-public slots:
-    // void onBtnBackClicked();
-
 
 private:
     Ui::BasicMode *ui;
-    GameMap* gameMapWeak;
+    GameMap* gameMapWeak = nullptr; // 仅用于访问 gameMap
 };
 
 #endif // BASICMODE_H

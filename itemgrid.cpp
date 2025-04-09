@@ -29,18 +29,6 @@ void ItemGrid::reset()
     std::mt19937 g(rd());
     std::shuffle(grid[0], grid[0] + 16 * 10, g);
 
-    // grid[1][0]=grid[3][0]=1;
-    // grid[2][0]=9;
-
-    // grid[0][4]=grid[0][6]=2;
-    // grid[0][5]=9;
-
-    // grid[0][15]=grid[2][15]=3;
-    // grid[1][15]=9;
-
-    // grid[9][4]=grid[9][6]=4;
-    // grid[9][5]=9;
-
     itemFinished();
 }
 
@@ -50,7 +38,13 @@ void ItemGrid::clicked(ItemPos item)
     {
         if (topParentWeak->getDebugWindow()->getDebugOptions().goldenFinger)
         {
-            (*this)[item] = topParentWeak->getDebugWindow()->getGoldenFingerValue();
+            int itemToSet = topParentWeak->getDebugWindow()->getGoldenFingerValue();
+
+            // 若将非空item设为空则remaining减一
+            char prevItem = (*this)[item];
+            if (!((*this)[item] = itemToSet))
+                if (prevItem)   // 非空
+                    --remaining;
             parent->update();
         }
         return;

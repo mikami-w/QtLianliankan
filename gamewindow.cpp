@@ -56,15 +56,13 @@ GameWindow::~GameWindow()
 void GameWindow::onBtnBasicClicked()
 {
     startMenu->hide();
-    setWindowTitle("欢乐连连看--基本模式");
-    paintBackground(":/res/img/fruit_bg.bmp");
     if (!basicMode)
     {
         basicMode = new BasicMode(this);
     }
-    basicMode->show();
 
     setGameMap();
+    basicMode->changeToThis();
 }
 
 void GameWindow::onBtnRestartClicked()
@@ -141,12 +139,14 @@ void GameWindow::paintBackground(QString image)
 
 void GameWindow::setGameMap()
 {
-    if (gameMap){
+    if (gameMap)
+    {
         gameMap->reset();
         if(!gameMap->isVisible())
             gameMap->show();
     }
-    else{
+    else
+    {
         gameMap = new GameMap(this);
         basicMode->bindGameMap(gameMap);
         gameMap->setGeometry(50,50,640,400);

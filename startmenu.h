@@ -18,10 +18,6 @@ public:
 
     void changeToThis() override;
 
-
-private slots:
-
-
 private:
     Ui::StartMenu *ui;
 };

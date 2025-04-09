@@ -9,7 +9,6 @@ Help::Help(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->BtnBack, &QPushButton::clicked, static_cast<GameWindow*>(parent), &GameWindow::onBtnBackClicked);
-    // installEventFilter(this);
 }
 
 Help::~Help()
@@ -18,8 +17,7 @@ Help::~Help()
 }
 
 bool Help::eventFilter(QObject *watched, QEvent *event)
-{
-    // qDebug()<<"in bool Help::eventFilter(QObject *watched, QEvent *event)";
+{// 防止子组件获取焦点导致键盘事件失效, 使用 filter
     if (event->type() == QEvent::KeyPress)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
@@ -27,11 +25,11 @@ bool Help::eventFilter(QObject *watched, QEvent *event)
         handleKeyboardDebug(keyEvent);
     }
 
-    return false;
+    return false; // 使事件继续传播
 }
 
 void Help::handleKeyboardDebug(QKeyEvent* keyEvent)
-{
+{// 在帮助页面使用键盘输入 debug 序列打开 debug 窗口
     static const std::array<char, 5> debugSequence = {'d', 'e', 'b', 'u', 'g'};
 
     if (!keyEvent->text().isEmpty())
@@ -43,23 +41,27 @@ void Help::handleKeyboardDebug(QKeyEvent* keyEvent)
             keyBuffer.push_back(static_cast<char>(ch.unicode()));
         }
     }
+
+    // 限制 buffer 长度
     if (keyBuffer.size() > 5)
     {
         keyBuffer.pop_front();
     }
+
     if (keyBuffer.size() != 5)
     {
         return;
     }
+
     if (std::equal(keyBuffer.begin(), keyBuffer.end(), debugSequence.begin()))
     {
         keyBuffer.clear();
-        // static_cast<GameWindow *>(parent())->getDebugWindow()->setDebugMode(true);
         static_cast<GameWindow *>(parent())->getDebugWindow()->show();
     }
 }
 
-void Help::showEvent(QShowEvent *event) {
+void Help::showEvent(QShowEvent *event)
+{
     QWidget::showEvent(event);
     this->installEventFilter(this);
     this->setFocus();
@@ -67,7 +69,8 @@ void Help::showEvent(QShowEvent *event) {
     this->raise();
 }
 
-void Help::hideEvent(QHideEvent *event) {
+void Help::hideEvent(QHideEvent *event)
+{
     QWidget::hideEvent(event);
     this->removeEventFilter(this);
 }
