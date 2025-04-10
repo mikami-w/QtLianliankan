@@ -36,54 +36,60 @@ void ItemGrid::clicked(ItemPos item)
 {
     if (topParentWeak->getDebugWindow()->inDebugMode())
     {
-        if (topParentWeak->getDebugWindow()->getDebugOptions().goldenFinger)
-        {
-            int itemToSet = topParentWeak->getDebugWindow()->getGoldenFingerValue();
+        auto debugWindow = topParentWeak->getDebugWindow();
+        if (debugWindow->getDebugOptions().goldenFinger) {
+            int itemToSet = debugWindow->getGoldenFingerValue();
+            char prevItem = (*this)[item];
+            (*this)[item] = itemToSet;
 
             // 若将非空item设为空则remaining减一
-            char prevItem = (*this)[item];
-            if (!((*this)[item] = itemToSet))
-                if (prevItem)   // 非空
-                    --remaining;
+            if (prevItem && !itemToSet)
+                --remaining;
+            // 若将空格子设为非空item则remaining加一
+            if (!prevItem && itemToSet)
+                ++remaining;
+
             parent->update();
         }
-        return;
     }
+    else
+    {
+        if (!(*this)[item])
+        {// 点击空白, 清空状态
+            itemFinished();
+            parent->update();
+            return;
+        }
 
-    if (!(*this)[item])
-    {// 点击空白, 清空状态
-        itemFinished();
-        parent->update();
-        return;
-    }
-
-    if (first == INVALID_ITEM)
-    {// 是两次点击中的第一次
-        first = item;
-        highlighted.push_back(item);
-        parent->update(QRect(item.col * 40, item.row * 40, 40, 40)); // 只有这里可以局部重绘, 因为下面的update不仅要绘制新的边框还要去掉旧的边框
-        return;
-    }
-    else if (second == INVALID_ITEM)
-    {// 是两次点击中的第二次
-        second = item;
-    }
-    else assert(0); // 怎么会事呢
-
-    if (first != second && (*this)[first] == (*this)[second])
-    {// 点击的不是同一个item且种类相同
-        if (findPath()) {
+        if (first == INVALID_ITEM)
+        {// 是两次点击中的第一次
+            first = item;
             highlighted.push_back(item);
-            // 绘制线条和框
             parent->update();
-            // 500ms后删除当前线条
-            QTimer::singleShot(500, [this]() {
-                paths.pop_front();
+            return;
+        }
+        else if (second == INVALID_ITEM)
+        {// 是两次点击中的第二次
+            second = item;
+        }
+        else assert(0); // 怎么会事呢
+
+        if (first != second && (*this)[first] == (*this)[second])
+        {// 点击的不是同一个item且种类相同
+            if (findPath()) {
+                highlighted.push_back(item);
+                // 绘制线条和框
                 parent->update();
-            });
+                // 500ms后删除当前线条
+                QTimer::singleShot(500, [this]() {
+                    paths.pop_front();
+                    parent->update();
+                });
+            }
         }
     }
 
+    qDebug()<<"remaining:"<<remaining;
     itemFinished();
     parent->update();
 

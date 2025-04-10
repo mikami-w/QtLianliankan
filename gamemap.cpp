@@ -72,7 +72,7 @@ void GameMap::paintEvent(QPaintEvent *event)
     //          << grid->needToPaintRect.col << ',' << grid->needToPaintRect.row;
 
     // 绘制对item的选择框
-    painter.setPen(QPen(Qt::red, 4));  // 红色 4px 宽的线
+    painter.setPen(QPen(Qt::red, 2));  // 红色 2px 宽的线
     for (ItemPos& item : itemGrid->highlighted)
     {
         painter.drawRect(item.col * 40, item.row * 40, 40, 40);
