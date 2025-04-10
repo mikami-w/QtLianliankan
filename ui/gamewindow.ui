@@ -26,8 +26,8 @@
    <string>欢乐连连看</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="img.qrc">
-    <normaloff>:/res/icon/LLK.ico</normaloff>:/res/icon/LLK.ico</iconset>
+   <iconset resource="../res/img.qrc">
+    <normaloff>:/icon/LLK.ico</normaloff>:/icon/LLK.ico</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -38,7 +38,7 @@
   <widget class="QWidget" name="CentralWidget"/>
  </widget>
  <resources>
-  <include location="img.qrc"/>
+  <include location="../res/img.qrc"/>
  </resources>
  <connections/>
 </ui>

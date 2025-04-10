@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/ZCOOLCanger.ttf</file>
+        <file>fonts/ZCOOLCangerBold.ttf</file>
+    </qresource>
+</RCC>

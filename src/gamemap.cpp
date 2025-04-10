@@ -31,8 +31,8 @@ void GameMap::reset()
 
 void GameMap::getTransparentPixmap()
 {
-    QPixmap textureOrigin(":/res/img/fruit_element.bmp");
-    QImage mask(":/res/img/fruit_mask.bmp");     // 加载 mask 为黑白位图
+    QPixmap textureOrigin(":/img/fruit_element.bmp");
+    QImage mask(":/img/fruit_mask.bmp");     // 加载 mask 为黑白位图
 
     // 确保贴图和mask图尺寸相同
     if (textureOrigin.size() != mask.size()) {

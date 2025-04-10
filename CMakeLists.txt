@@ -6,6 +6,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+# 设置 uic 查找 ui 文件的路径
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -13,18 +16,18 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        main.cpp
-        gamewindow.h gamewindow.cpp gamewindow.ui
-        startmenu.h startmenu.cpp startmenu.ui
-        basicmode.h basicmode.cpp basicmode.ui
-        gamemap.h gamemap.cpp gamemap.ui
-        itemgrid.h itemgrid.cpp
-        debugwindow.h debugwindow.cpp debugwindow.ui
-        options.h options.cpp options.ui
-        help.h help.cpp help.ui
-        ReturnablePage.h
-        img.qrc
-        fonts.qrc
+        src/main.cpp
+        src/gamewindow.h src/gamewindow.cpp ui/gamewindow.ui
+        src/startmenu.h src/startmenu.cpp ui/startmenu.ui
+        src/basicmode.h src/basicmode.cpp ui/basicmode.ui
+        src/gamemap.h src/gamemap.cpp ui/gamemap.ui
+        src/itemgrid.h src/itemgrid.cpp
+        src/debugwindow.h src/debugwindow.cpp ui/debugwindow.ui
+        src/options.h src/options.cpp ui/options.ui
+        src/help.h src/help.cpp ui/help.ui
+        src/ReturnablePage.h
+        res/img.qrc
+        res/fonts.qrc
 
 )
 

@@ -32,10 +32,10 @@ GameWindow::GameWindow(QWidget *parent)
     QString styleAppend = QString(R"(
     QPushButton { font-family: '%1'; }
     QLabel { font-family: '%2'; }
-    )") .arg(getFontFamily(":/res/fonts/ZCOOLCanger.ttf"), getFontFamily(":/res/fonts/ZCOOLCangerBold.ttf"));
+    )") .arg(getFontFamily(":/fonts/ZCOOLCanger.ttf"), getFontFamily(":/fonts/ZCOOLCangerBold.ttf"));
     this->setStyleSheet(styleSheet()+styleAppend);
 
-    paintBackground(":/res/img/llk_main.bmp");
+    paintBackground(":/img/llk_main.bmp");
 
     startMenu->show();
     startMenu->raise();

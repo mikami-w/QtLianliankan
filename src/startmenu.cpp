@@ -29,6 +29,6 @@ StartMenu::~StartMenu()
 void StartMenu::changeToThis()
 {
     static_cast<GameWindow *>(parent())->setWindowTitle("欢乐连连看");
-    static_cast<GameWindow *>(parent())->paintBackground(":/res/img/llk_main.bmp");
+    static_cast<GameWindow *>(parent())->paintBackground(":/img/llk_main.bmp");
     this->show();
 }

@@ -20,7 +20,7 @@ Options::~Options()
 void Options::changeToThis()
 {
     // static_cast<GameWindow*>(parent())->setWindowTitle("欢乐连连看");
-    static_cast<GameWindow*>(parent())->paintBackground(":/res/img/fruit_bg.bmp");
+    static_cast<GameWindow*>(parent())->paintBackground(":/img/fruit_bg.bmp");
     this->show();
 }
 
