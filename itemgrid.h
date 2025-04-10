@@ -43,7 +43,7 @@ class ItemGrid
     const static ItemPos INVALID_ITEM;
 
     GameMap* parent;
-    GameWindow* topParentWeak;
+    GameWindow* topParentWeak;  // 仅用于访问顶级父类的指针
     unsigned int remaining;
     char grid[ROW_LENGTH][COL_LENGTH]{}; // 水果矩阵, 0表示空, 1~10代表10种水果
 

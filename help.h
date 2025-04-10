@@ -16,13 +16,15 @@ public:
     explicit Help(QWidget *parent = nullptr);
     ~Help();
 
+    void handleKeyboardDebug(QKeyEvent *keyEvent);
+    void changeToThis();
+
+protected:
     // void keyPressEvent(QKeyEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void handleKeyboardDebug(QKeyEvent *keyEvent);
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
 
-    void changeToThis();
 private:
     Ui::Help *ui;
     std::deque<char> keyBuffer;

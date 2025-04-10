@@ -21,11 +21,12 @@ public:
     ~GameMap();
     void reset();
 
-private:
-    void getTransparentPixmap();
-
+protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override ;
+
+private:
+    void getTransparentPixmap();
 
     Ui::GameMap *ui;
     std::vector<QPixmap> texture;

@@ -34,8 +34,8 @@ public:
     const DebugOptions& getDebugOptions() const { return debugOptions; }
     void setMode(bool value, Mode mode);
 
+protected:
     void closeEvent(QCloseEvent *event) override;
-
 
 private:
     Ui::DebugWindow *ui;

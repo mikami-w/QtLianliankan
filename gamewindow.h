@@ -25,7 +25,8 @@ public:
     GameWindow(QWidget *parent = nullptr);
     ~GameWindow();
 
-    DebugWindow *getDebugWindow() {
+    DebugWindow* getDebugWindow()
+    {
         if (!debugWindow)
             debugWindow = new DebugWindow(nullptr);
         return debugWindow;
@@ -34,10 +35,11 @@ public:
     void paintBackground(QString image);
     void setGameMap();
 
-    void closeEvent(QCloseEvent *event) override;
-
     // 若跳转到的页面可能调用 void onBtnBackClicked() 函数则需要设置该字段值
     ReturnablePage* prevPage = nullptr;
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 public slots:
     void onBtnBasicClicked();
