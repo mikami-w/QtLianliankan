@@ -21,6 +21,9 @@ public:
     ~GameMap();
     void reset();
 
+public slots:
+    void onBtnHintClicked();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override ;

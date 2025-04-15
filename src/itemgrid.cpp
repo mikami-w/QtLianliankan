@@ -76,8 +76,8 @@ void ItemGrid::clicked(ItemPos item)
 
         if (first != second && (*this)[first] == (*this)[second])
         {// 点击的不是同一个item且种类相同
-            if (findPath()) {
-                highlighted.push_back(item);
+            if (findPath(first, second)) {
+                // highlighted.push_back(item);
                 // 绘制线条和框
                 parent->update();
                 // 500ms后删除当前线条
@@ -108,34 +108,82 @@ void ItemGrid::clicked(ItemPos item)
     // return [](){};
 }
 
-bool ItemGrid::findPath()
+bool ItemGrid::findPath(ItemPos start, ItemPos end, bool doErase)
 {
-    if (checkLine1(first, second))
+    if (checkLine1(start, end))
     {
-        paths.emplace_back(std::initializer_list<ItemPos>{ first, second });
-        eraseCurrentItems();
+        if (doErase)
+        {
+            paths.emplace_back(std::initializer_list<ItemPos>{ start, end });
+            eraseCurrentItems();
+        }
         return true;
     }
 
     {
-        auto [validity, m1] = checkLine2(first, second);
+        auto [validity, m1] = checkLine2(start, end);
         if (validity)
         {
-            paths.emplace_back(std::initializer_list<ItemPos>{ first, m1, second });
-            eraseCurrentItems();
-            parent->update();
+            if (doErase)
+            {
+                paths.emplace_back(std::initializer_list<ItemPos>{ start, m1, end });
+                eraseCurrentItems();
+            }
             return true;
         }
     }
 
     {
-        auto [validity, m1, m2] = checkLine3(first, second);
+        auto [validity, m1, m2] = checkLine3(start, end);
         if (validity)
         {
-            paths.emplace_back(std::initializer_list<ItemPos>{ first, m1, m2, second });
-            eraseCurrentItems();
-            parent->update();
+            if (doErase)
+            {
+                paths.emplace_back(std::initializer_list<ItemPos>{ start, m1, m2, end });
+                eraseCurrentItems();
+            }
             return true;
+        }
+    }
+
+    return false;
+}
+
+bool ItemGrid::getHint()
+{
+    // 从内存开始处偏移量转化为 col, row
+    auto getItemPos = [](int offset) -> ItemPos {
+        return ItemPos(offset % COL_LENGTH, offset / COL_LENGTH);
+    };
+
+    char* gridD1 = reinterpret_cast<char*>(grid);
+
+    for (int offset1 = 0; offset1 < ROW_LENGTH * COL_LENGTH; ++offset1)
+    {
+        if (gridD1[offset1])
+        {
+            for (int offset2 = offset1 + 1; offset2 < ROW_LENGTH * COL_LENGTH; ++offset2)
+            { // 前面的不再遍历, 从下一个开始
+                if (gridD1[offset2] == gridD1[offset1])
+                {
+                    if (findPath(getItemPos(offset1), getItemPos(offset2), false))
+                    {
+                        highlighted.push_back(getItemPos(offset1));
+                        highlighted.push_back(getItemPos(offset2));
+                        parent->update();
+                        QTimer::singleShot(1000, [this]() {
+                            if (highlighted.size() <= 2)
+                                highlighted.clear();
+                            else // hint 的两个肯定在最前面两个
+                                highlighted.erase(highlighted.begin(),
+                                                  highlighted.begin() + 2);
+                            parent->update();
+                        });
+
+                        return true;
+                    }
+                }
+            }
         }
     }
 

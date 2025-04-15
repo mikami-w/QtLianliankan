@@ -36,7 +36,8 @@ class ItemGrid
     void reset();
     void clicked(ItemPos item);
     void itemFinished(){ first = INVALID_ITEM; second = INVALID_ITEM; highlighted.clear(); };
-    bool findPath();
+    bool findPath(ItemPos start, ItemPos end, bool doErase = true);
+    bool getHint();
 
     char& operator[](ItemPos pos) { return grid[pos.row][pos.col]; }
 

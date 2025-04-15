@@ -19,7 +19,7 @@ public:
 
     void changeToThis() override;
 
-    void bindGameMap(GameMap *map) { gameMapWeak = map; }
+    void bindGameMap(GameMap *map);
 
 private:
     Ui::BasicMode *ui;

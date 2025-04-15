@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QPainterPath>
+#include <QMessagebox>
 
 GameMap::GameMap(QWidget *parent)
     : QWidget(parent),
@@ -27,6 +28,15 @@ void GameMap::reset()
     itemGrid->itemFinished();
     itemGrid->reset();
     update();
+}
+
+void GameMap::onBtnHintClicked()
+{
+    itemGrid->itemFinished();
+    if (itemGrid->getHint())
+        this->update();
+    else
+        QMessageBox::information(static_cast<QWidget*>(parent()), "Hint", "已经没有可消除的水果了!");
 }
 
 void GameMap::getTransparentPixmap()
