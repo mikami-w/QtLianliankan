@@ -34,6 +34,7 @@ public:
 
     void paintBackground(QString image);
     void setGameMap();
+    void hideAll();
 
     // 若跳转到的页面可能调用 void onBtnBackClicked() 函数则需要设置该字段值
     ReturnablePage* prevPage = nullptr;
