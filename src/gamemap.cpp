@@ -85,7 +85,11 @@ void GameMap::paintEvent(QPaintEvent *event)
     painter.setPen(QPen(Qt::red, 2));  // 红色 2px 宽的线
     for (ItemPos& item : itemGrid->highlighted)
     {
-        painter.drawRect(item.col * 40, item.row * 40, 40, 40);
+        QRect rect(item.col * 40, item.row * 40, 40, 40);
+        // 向内缩小 halfPen 宽度，避免超出原矩形边缘
+        int halfPen = 1;
+        rect.adjust(halfPen, halfPen, -halfPen, -halfPen);
+        painter.drawRect(rect);
     }
 
     // 绘制连接线
