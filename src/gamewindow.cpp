@@ -72,29 +72,21 @@ void GameWindow::onBtnRestartClicked()
 
 void GameWindow::onBtnBackClicked()
 {
-    if (gameMap) gameMap->hide();
-    if (basicMode) basicMode->hide();
-    if (options) options->hide();
-    if (help) help->hide();
+    hideAll();
 
     prevPage->changeToThis();
 }
 
 void GameWindow::onBtnBackToMenuClicked()
 {
-    if (gameMap) gameMap->hide();
-    if (basicMode) basicMode->hide();
-    if (options) options->hide();
-    if (help) help->hide();
+    hideAll();
 
     startMenu->changeToThis();
 }
 
 void GameWindow::onBtnOptionsClicked()
 {
-    startMenu->hide();
-    if (basicMode) basicMode->hide();
-    if (gameMap) gameMap->hide();
+    hideAll();
 
     if (!options)
     {
@@ -105,9 +97,7 @@ void GameWindow::onBtnOptionsClicked()
 
 void GameWindow::onBtnHelpClicked()
 {
-    startMenu->hide();
-    if (basicMode) basicMode->hide();
-    if (gameMap) gameMap->hide();
+    hideAll();
 
     if (!help)
     {
@@ -152,6 +142,15 @@ void GameWindow::setGameMap()
         gameMap->setGeometry(50,50,640,400);
         gameMap->show();
     }
+}
+
+void GameWindow::hideAll()
+{
+    startMenu->hide();
+    if (gameMap) gameMap->hide();
+    if (basicMode) basicMode->hide();
+    if (options) options->hide();
+    if (help) help->hide();
 }
 
 void GameWindow::closeEvent(QCloseEvent *event)
