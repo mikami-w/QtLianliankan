@@ -85,6 +85,8 @@ void GameMap::paintEvent(QPaintEvent *event)
     painter.setPen(QPen(Qt::red, 2));  // 红色 2px 宽的线
     for (ItemPos& item : itemGrid->highlighted)
     {
+        if (item == ItemGrid::INVALID_ITEM)
+            continue;
         QRect rect(item.col * 40, item.row * 40, 40, 40);
         // 向内缩小 halfPen 宽度，避免超出原矩形边缘
         int halfPen = 1;

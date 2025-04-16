@@ -12,7 +12,8 @@ const ItemPos ItemGrid::INVALID_ITEM{-1,-1};
 ItemGrid::ItemGrid(GameMap *_parent)
     : parent(_parent),
     topParentWeak(static_cast<GameWindow *>(parent->parent())),
-    remaining(0)
+    remaining(0),
+    highlighted(3, INVALID_ITEM)
 {
     reset();
 }
@@ -64,7 +65,7 @@ void ItemGrid::clicked(ItemPos item)
         if (first == INVALID_ITEM)
         {// 是两次点击中的第一次
             first = item;
-            highlighted.push_back(item);
+            highlighted[0] = item;
             parent->update();
             return;
         }
@@ -168,15 +169,12 @@ bool ItemGrid::getHint()
                 {
                     if (findPath(getItemPos(offset1), getItemPos(offset2), false))
                     {
-                        highlighted.push_back(getItemPos(offset1));
-                        highlighted.push_back(getItemPos(offset2));
+                        highlighted[1] = getItemPos(offset1);
+                        highlighted[2] = getItemPos(offset2);
                         parent->update();
                         QTimer::singleShot(1000, [this]() {
-                            if (highlighted.size() <= 2)
-                                highlighted.clear();
-                            else // hint 的两个肯定在最前面两个
-                                highlighted.erase(highlighted.begin(),
-                                                  highlighted.begin() + 2);
+                            highlighted[1] = INVALID_ITEM;
+                            highlighted[2] = INVALID_ITEM;
                             parent->update();
                         });
 

@@ -35,11 +35,11 @@ class ItemGrid
     ItemGrid(GameMap *_parent);
     void reset();
     void clicked(ItemPos item);
-    void itemFinished(){ first = INVALID_ITEM; second = INVALID_ITEM; highlighted.clear(); };
+    void itemFinished() noexcept { first = second = highlighted[0] = INVALID_ITEM; }; // 不会清除hint的区域
     bool findPath(ItemPos start, ItemPos end, bool doErase = true);
     bool getHint();
 
-    char& operator[](ItemPos pos) { return grid[pos.row][pos.col]; }
+    char& operator[](ItemPos pos) noexcept { return grid[pos.row][pos.col]; }
 
     const static ItemPos INVALID_ITEM;
 
@@ -50,13 +50,13 @@ class ItemGrid
 
     ItemPos first = INVALID_ITEM;
     ItemPos second = INVALID_ITEM;
-    std::vector<ItemPos> highlighted; // 存储需要绘制边框的水果
+    std::vector<ItemPos> highlighted; // 存储需要绘制边框的水果, 0用于当前点击的水果, 1和2用于hint的水果
     std::deque<Path> paths;
 
     bool checkLine1(ItemPos a, ItemPos b) const; // 检查是否一条直线连通
     std::tuple<bool,ItemPos> checkLine2(ItemPos a, ItemPos b) const; // 检查是否两条直线连通(转折一次, 返回值为连通性与中转点)
     std::tuple<bool,ItemPos,ItemPos> checkLine3(ItemPos a, ItemPos b) const; // 检查是否两条直线连通(转折两次, 返回值为连通性与中转点, 且顺序为从a开始按参数顺序到b结束)
-    void eraseCurrentItems() {
+    void eraseCurrentItems() noexcept {
         if (first != INVALID_ITEM && second != INVALID_ITEM)
         {
             grid[first.row][first.col] = 0;
