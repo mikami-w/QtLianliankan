@@ -19,10 +19,9 @@ InfoPanel::~InfoPanel()
     delete ui;
 }
 
-void InfoPanel::restartTimer(qint64 initTime)
+void InfoPanel::resetTimer(qint64 initTime)
 {
     timer->reset(initTime);
-    timer->start();
 }
 
 void InfoPanel::stopTimer()
@@ -33,6 +32,16 @@ void InfoPanel::stopTimer()
 void InfoPanel::startTimer()
 {
     timer->start();
+}
+
+void InfoPanel::setTimerEnabled(bool enable) noexcept
+{
+    timerEnabled = enable;
+    if (!enable)
+    {
+        ui->LblTimer->setText("剩余时间: +∞ s");
+        timer->reset(0);
+    }
 }
 
 void InfoPanel::pause()

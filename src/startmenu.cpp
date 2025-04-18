@@ -7,10 +7,8 @@ StartMenu::StartMenu(QWidget *parent)
     , ui(new Ui::StartMenu)
 {
     ui->setupUi(this);
-    connect(ui->BtnBasic, &QPushButton::clicked, [this, parent]() {
-        static_cast<GameWindow *>(parent)->onBtnBasicClicked();
-        static_cast<GameWindow *>(parent)->prevPage = static_cast<ReturnablePage*>(this);
-    });
+    connect(ui->BtnBasic, &QPushButton::clicked, static_cast<GameWindow*>(parent), &GameWindow::onBtnBasicClicked);
+    connect(ui->BtnZen, &QPushButton::clicked, static_cast<GameWindow*>(parent), &GameWindow::onBtnZenClicked);
     connect(ui->BtnOptions, &QPushButton::clicked, [this, parent]() {
         static_cast<GameWindow *>(parent)->onBtnOptionsClicked();
         static_cast<GameWindow *>(parent)->prevPage = static_cast<ReturnablePage*>(this);

@@ -23,11 +23,9 @@ BasicMode::BasicMode(QWidget *parent)
     });
 
     connect(ui->BtnPause, &QPushButton::clicked, [this, parent](){
-
-
         static_cast<GameWindow *>(parent)->onBtnPauseClicked();
-
     });
+
 }
 
 BasicMode::~BasicMode()

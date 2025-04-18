@@ -65,30 +65,41 @@ void GameWindow::onBtnBasicClicked()
 
     setGameMap();
     setInfoPanel();
-    infoPanel->setTimer(true);
-    infoPanel->restartTimer(InfoPanel::STANDARD_TIME);
+    infoPanel->setTimerEnabled(true);
+    infoPanel->resetTimer(InfoPanel::STANDARD_TIME);
+    infoPanel->startTimer();
     basicMode->changeToThis();
 }
 
 void GameWindow::onBtnZenClicked()
 {
+    hideAll();
+    if (!basicMode)
+    {
+        basicMode = new BasicMode(this);
+    }
 
+    setGameMap();
+    setInfoPanel();
+    infoPanel->setTimerEnabled(false);
+    basicMode->changeToThis();
 }
 
 void GameWindow::onBtnRestartClicked()
 {
     setGameMap();
     resume();
-    if (infoPanel->isTimerEnabled())
+    if (infoPanel) if (infoPanel->isTimerEnabled())
     {
-        infoPanel->restartTimer(InfoPanel::STANDARD_TIME);
+        infoPanel->resetTimer(InfoPanel::STANDARD_TIME);
+        infoPanel->startTimer();
     }
 }
 
 void GameWindow::onBtnBackClicked()
 {
     hideAll();
-    if (!paused && infoPanel)
+    if (infoPanel) if (!paused && infoPanel->isTimerEnabled())
         infoPanel->startTimer();
 
     prevPage->changeToThis();
@@ -100,6 +111,7 @@ void GameWindow::onBtnBackToMenuClicked()
         resume();
 
     hideAll();
+    infoPanel->resetTimer(0);
 
     startMenu->changeToThis();
 }
@@ -258,22 +270,28 @@ void GameWindow::hideAll()
 
 void GameWindow::pause()
 {
-    infoPanel->pause();
+    if (infoPanel->isTimerEnabled())
+    {
+        infoPanel->pause();
+        infoPanel->setEnabled(false);
+    }
+
     basicMode->getUi()->BtnPause->setText("恢复");
     basicMode->getUi()->BtnHint->setEnabled(false);
-
-    infoPanel->setEnabled(false);
     gameMap->setEnabled(false);
     paused = true;
 }
 
 void GameWindow::resume()
 {
-    infoPanel->resume();
+    if (infoPanel->isTimerEnabled())
+    {
+        infoPanel->resume();
+        infoPanel->setEnabled(true);
+    }
+
     basicMode->getUi()->BtnPause->setText("暂停");
     basicMode->getUi()->BtnHint->setEnabled(true);
-
-    infoPanel->setEnabled(true);
     gameMap->setEnabled(true);
     paused = false;
 }
