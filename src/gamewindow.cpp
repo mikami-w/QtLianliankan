@@ -72,6 +72,7 @@ void GameWindow::onBtnBasicClicked()
 void GameWindow::onBtnRestartClicked()
 {
     setGameMap();
+    resume();
     if (infoPanel->isTimerEnabled())
     {
         infoPanel->restartTimer(InfoPanel::STANDARD_TIME);
@@ -81,8 +82,9 @@ void GameWindow::onBtnRestartClicked()
 void GameWindow::onBtnBackClicked()
 {
     hideAll();
-    if (!paused)
-        infoPanel->startTimer();
+    // if (!paused)
+    //     infoPanel->startTimer();
+    // resume();
     prevPage->changeToThis();
 }
 
@@ -104,10 +106,12 @@ void GameWindow::onBtnOptionsClicked()
     {
         options = new Options(this);
     }
-    if (!paused && infoPanel->isTimerEnabled())
-    {
-        infoPanel->stopTimer();
-    }
+    // if (!paused && infoPanel->isTimerEnabled())
+    // {
+    //     infoPanel->stopTimer();
+    // }
+    if (!paused)
+        pause();
     options->changeToThis();
 }
 
@@ -119,10 +123,12 @@ void GameWindow::onBtnHelpClicked()
     {
         help = new Help(this);
     }
-    if (!paused && infoPanel->isTimerEnabled())
-    {
-        infoPanel->stopTimer();
-    }
+    // if (!paused && infoPanel->isTimerEnabled())
+    // {
+    //     infoPanel->stopTimer();
+    // }
+    if (!paused)
+        pause();
     help->changeToThis();
 }
 
@@ -180,7 +186,8 @@ void GameWindow::gameFinished()
         this, "Game Finished", "恭喜完成游戏!\n你想再来一局游戏来庆祝胜利吗?",
         QMessageBox::Yes | QMessageBox::No);
 
-    if (reply == QMessageBox::Yes) {
+    if (reply == QMessageBox::Yes)
+    {
         onBtnRestartClicked();
     }
     else if (reply == QMessageBox::No)
