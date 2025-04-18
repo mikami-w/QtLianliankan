@@ -25,10 +25,11 @@ set(PROJECT_SOURCES
         src/debugwindow.h src/debugwindow.cpp ui/debugwindow.ui
         src/options.h src/options.cpp ui/options.ui
         src/help.h src/help.cpp ui/help.ui
+        src/infopanel.h src/infopanel.cpp ui/infopanel.ui
         src/ReturnablePage.h
+        src/countdowntimer.h src/countdowntimer.cpp
         res/img.qrc
         res/fonts.qrc
-
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -96,15 +96,7 @@ void ItemGrid::clicked(ItemPos item)
 
     if (!remaining)
     {
-        auto reply = QMessageBox::question(static_cast<QWidget *>(parent->parent()),
-                              "Game Finished",
-                              "恭喜完成游戏!\n你想再来一局游戏来庆祝胜利吗?",
-                              QMessageBox::Yes | QMessageBox::No);
-
-        if (reply == QMessageBox::Yes)
-        {
-            topParentWeak->onBtnRestartClicked();
-        }
+        topParentWeak->gameFinished();
     }
     // return [](){};
 }

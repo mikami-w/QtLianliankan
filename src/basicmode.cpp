@@ -7,15 +7,26 @@ BasicMode::BasicMode(QWidget *parent)
     , ui(new Ui::BasicMode)
 {
     ui->setupUi(this);
+
     connect(ui->BtnRestart, &QPushButton::clicked, static_cast<GameWindow*>(parent), &GameWindow::onBtnRestartClicked);
+
     connect(ui->BtnBackToMenu, &QPushButton::clicked, static_cast<GameWindow*>(parent), &GameWindow::onBtnBackToMenuClicked);
+
     connect(ui->BtnOptions, &QPushButton::clicked, [this, parent]() {
         static_cast<GameWindow *>(parent)->onBtnOptionsClicked();
         static_cast<GameWindow *>(parent)->prevPage = static_cast<ReturnablePage*>(this);
     });
+
     connect(ui->BtnHelp, &QPushButton::clicked, [this, parent]() {
         static_cast<GameWindow *>(parent)->onBtnHelpClicked();
         static_cast<GameWindow *>(parent)->prevPage = static_cast<ReturnablePage*>(this);
+    });
+
+    connect(ui->BtnPause, &QPushButton::clicked, [this, parent](){
+
+
+        static_cast<GameWindow *>(parent)->onBtnPauseClicked();
+
     });
 }
 
@@ -30,6 +41,7 @@ void BasicMode::changeToThis()
     static_cast<GameWindow*>(parent())->paintBackground(":/img/fruit_bg.bmp");
     this->show();
     gameMapWeak->show();
+    infoPanelWeak->show();
 }
 
 void BasicMode::bindGameMap(GameMap *map)
@@ -37,4 +49,9 @@ void BasicMode::bindGameMap(GameMap *map)
     gameMapWeak = map;
     connect(ui->BtnHint, &QPushButton::clicked, gameMapWeak,
             &GameMap::onBtnHintClicked);
+}
+
+void BasicMode::bindInfoPanel(InfoPanel *panel)
+{
+    infoPanelWeak = panel;
 }

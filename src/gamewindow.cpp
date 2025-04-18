@@ -1,5 +1,6 @@
 #include "gamewindow.h"
 #include "./ui_gamewindow.h"
+#include "ui/ui_basicmode.h"
 #include <QPalette>
 #include <QBrush>
 #include <QFontDatabase>
@@ -25,6 +26,7 @@ GameWindow::GameWindow(QWidget *parent)
     startMenu(new StartMenu(this)),
     basicMode(nullptr),
     gameMap(nullptr),
+    infoPanel(nullptr),
     options(nullptr),
     help(nullptr)
 {
@@ -35,9 +37,7 @@ GameWindow::GameWindow(QWidget *parent)
     )") .arg(getFontFamily(":/fonts/ZCOOLCanger.ttf"), getFontFamily(":/fonts/ZCOOLCangerBold.ttf"));
     this->setStyleSheet(styleSheet()+styleAppend);
 
-    paintBackground(":/img/llk_main.bmp");
-
-    startMenu->show();
+    startMenu->changeToThis();
     startMenu->raise();
 
 }
@@ -49,6 +49,7 @@ GameWindow::~GameWindow()
     delete startMenu;
     delete basicMode;
     delete gameMap;
+    delete infoPanel;
     delete options;
     delete help;
 }
@@ -62,23 +63,34 @@ void GameWindow::onBtnBasicClicked()
     }
 
     setGameMap();
+    setInfoPanel();
+    infoPanel->setTimer(true);
+    infoPanel->restartTimer(InfoPanel::STANDARD_TIME);
     basicMode->changeToThis();
 }
 
 void GameWindow::onBtnRestartClicked()
 {
     setGameMap();
+    if (infoPanel->isTimerEnabled())
+    {
+        infoPanel->restartTimer(InfoPanel::STANDARD_TIME);
+    }
 }
 
 void GameWindow::onBtnBackClicked()
 {
     hideAll();
-
+    if (!paused)
+        infoPanel->startTimer();
     prevPage->changeToThis();
 }
 
 void GameWindow::onBtnBackToMenuClicked()
 {
+    if (paused)
+        resume();
+
     hideAll();
 
     startMenu->changeToThis();
@@ -92,6 +104,10 @@ void GameWindow::onBtnOptionsClicked()
     {
         options = new Options(this);
     }
+    if (!paused && infoPanel->isTimerEnabled())
+    {
+        infoPanel->stopTimer();
+    }
     options->changeToThis();
 }
 
@@ -103,7 +119,24 @@ void GameWindow::onBtnHelpClicked()
     {
         help = new Help(this);
     }
+    if (!paused && infoPanel->isTimerEnabled())
+    {
+        infoPanel->stopTimer();
+    }
     help->changeToThis();
+}
+
+void GameWindow::onBtnPauseClicked()
+{
+    if (paused)
+    {
+        resume();
+    }
+    else
+    {
+        pause();
+    }
+
 }
 
 void GameWindow::handleFullWindowToggle(bool checked)
@@ -116,6 +149,43 @@ void GameWindow::handleFullWindowToggle(bool checked)
     else
     {
         qDebug()<<"unchecked";
+    }
+}
+
+void GameWindow::gameover()
+{
+
+    QMessageBox MsgGameover(QMessageBox::Information, "Gameover", "时间耗尽了. 已经是极限了吗?", QMessageBox::NoButton, this);
+    auto BtnRestart = MsgGameover.addButton("重新开始", QMessageBox::AcceptRole);
+    auto BtnStartMenu = MsgGameover.addButton("返回主菜单", QMessageBox::RejectRole);
+
+    // 显示对话框, 同时阻断主事件循环
+    MsgGameover.exec();
+
+
+    if (MsgGameover.clickedButton() == BtnRestart)
+    {
+        onBtnRestartClicked();
+    }
+    else
+    {
+        onBtnBackToMenuClicked();
+    }
+}
+
+void GameWindow::gameFinished()
+{
+    infoPanel->stopTimer();
+    auto reply = QMessageBox::question(
+        this, "Game Finished", "恭喜完成游戏!\n你想再来一局游戏来庆祝胜利吗?",
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        onBtnRestartClicked();
+    }
+    else if (reply == QMessageBox::No)
+    {
+        onBtnBackToMenuClicked();
     }
 }
 
@@ -144,13 +214,55 @@ void GameWindow::setGameMap()
     }
 }
 
+void GameWindow::setInfoPanel()
+{
+    if (infoPanel)
+    {
+        if(!infoPanel->isVisible())
+            infoPanel->show();
+    }
+    else
+    {
+        infoPanel = new InfoPanel(this);
+        basicMode->bindInfoPanel(infoPanel);
+        infoPanel->setGeometry(50,475,640,100);
+        infoPanel->show();
+    }
+}
+
 void GameWindow::hideAll()
 {
     startMenu->hide();
     if (gameMap) gameMap->hide();
+    if (infoPanel)
+    {
+        if (infoPanel->isTimerRunning())
+            infoPanel->stopTimer();
+        infoPanel->hide();
+    }
     if (basicMode) basicMode->hide();
     if (options) options->hide();
     if (help) help->hide();
+}
+
+void GameWindow::pause()
+{
+    infoPanel->pause();
+    basicMode->getUi()->BtnPause->setText("恢复");
+
+    infoPanel->setEnabled(false);
+    gameMap->setEnabled(false);
+    paused = true;
+}
+
+void GameWindow::resume()
+{
+    infoPanel->resume();
+    basicMode->getUi()->BtnPause->setText("暂停");
+
+    infoPanel->setEnabled(true);
+    gameMap->setEnabled(true);
+    paused = false;
 }
 
 void GameWindow::closeEvent(QCloseEvent *event)

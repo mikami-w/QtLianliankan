@@ -3,6 +3,7 @@
 
 #include "ReturnablePage.h"
 #include "gamemap.h"
+#include "infopanel.h"
 #include <QWidget>
 
 namespace Ui {
@@ -16,14 +17,18 @@ class BasicMode : public QWidget, public ReturnablePage
 public:
     explicit BasicMode(QWidget *parent = nullptr);
     ~BasicMode();
+    Ui::BasicMode* getUi() noexcept { return ui; }
+
 
     void changeToThis() override;
 
     void bindGameMap(GameMap *map);
 
+    void bindInfoPanel(InfoPanel *panel);
 private:
     Ui::BasicMode *ui;
     GameMap* gameMapWeak = nullptr; // 仅用于访问 gameMap
+    InfoPanel* infoPanelWeak = nullptr;
 };
 
 #endif // BASICMODE_H
