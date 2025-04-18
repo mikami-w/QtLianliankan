@@ -6,12 +6,15 @@ CountdownTimer::CountdownTimer(QObject *parent):
     elapsedTimer(new QElapsedTimer())
 {
     connect(qtimer, &QTimer::timeout, [this]() {
-        emit pass1s();
-
-        if (--time == 0)
+        if (running) // 防止用户快速调用start后调用stop
         {
-            stop();
-            emit timeout();
+            emit pass1s();
+
+            if (--time == 0)
+            {
+                stop();
+                emit timeout();
+            }
         }
     });
 }
@@ -30,22 +33,28 @@ void CountdownTimer::start()
     running = true;
     elapsedTimer->start();
     QTimer::singleShot(remainingTimeToNextSecond, [this](){
-        emit pass1s();
+        if (running)
+        {
+            emit pass1s();
 
-        if (--time == 0)
-        {
-            stop();
-            emit timeout();
-        }
-        else
-        {
-            qtimer->start(1000);
+            if (--time == 0)
+            {
+                stop();
+                emit timeout();
+            }
+            else
+            {
+                qtimer->start(1000);
+            }
         }
     });
 }
 
 void CountdownTimer::stop()
 {
+    // qtimer->stop();
+    // running = false;
+
     if (!running)
         return;
 
@@ -56,7 +65,7 @@ void CountdownTimer::stop()
 
 void CountdownTimer::reset(qint64 initTime)
 {
-    if (running) stop(); // 先停止再重置
+    stop(); // 先停止再重置
     time = initTime;
     remainingTimeToNextSecond = 0;
 }
