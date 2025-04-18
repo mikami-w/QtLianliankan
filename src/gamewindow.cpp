@@ -56,7 +56,8 @@ GameWindow::~GameWindow()
 
 void GameWindow::onBtnBasicClicked()
 {
-    startMenu->hide();
+    // startMenu->hide();
+    hideAll();
     if (!basicMode)
     {
         basicMode = new BasicMode(this);
@@ -87,7 +88,7 @@ void GameWindow::onBtnRestartClicked()
 void GameWindow::onBtnBackClicked()
 {
     hideAll();
-    if (!paused)
+    if (!paused && infoPanel)
         infoPanel->startTimer();
 
     prevPage->changeToThis();
@@ -111,7 +112,7 @@ void GameWindow::onBtnOptionsClicked()
     {
         options = new Options(this);
     }
-    if (!paused && infoPanel->isTimerEnabled())
+    if (infoPanel) if (!paused && infoPanel->isTimerEnabled())
     {
         infoPanel->stopTimer();
     }
@@ -127,7 +128,7 @@ void GameWindow::onBtnHelpClicked()
     {
         help = new Help(this);
     }
-    if (!paused && infoPanel->isTimerEnabled())
+    if (infoPanel) if (!paused && infoPanel->isTimerEnabled())
     {
         infoPanel->stopTimer();
     }
