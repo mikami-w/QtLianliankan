@@ -69,6 +69,11 @@ void GameWindow::onBtnBasicClicked()
     basicMode->changeToThis();
 }
 
+void GameWindow::onBtnZenClicked()
+{
+
+}
+
 void GameWindow::onBtnRestartClicked()
 {
     setGameMap();
@@ -82,9 +87,9 @@ void GameWindow::onBtnRestartClicked()
 void GameWindow::onBtnBackClicked()
 {
     hideAll();
-    // if (!paused)
-    //     infoPanel->startTimer();
-    // resume();
+    if (!paused)
+        infoPanel->startTimer();
+
     prevPage->changeToThis();
 }
 
@@ -106,12 +111,11 @@ void GameWindow::onBtnOptionsClicked()
     {
         options = new Options(this);
     }
-    // if (!paused && infoPanel->isTimerEnabled())
-    // {
-    //     infoPanel->stopTimer();
-    // }
-    if (!paused)
-        pause();
+    if (!paused && infoPanel->isTimerEnabled())
+    {
+        infoPanel->stopTimer();
+    }
+
     options->changeToThis();
 }
 
@@ -123,12 +127,11 @@ void GameWindow::onBtnHelpClicked()
     {
         help = new Help(this);
     }
-    // if (!paused && infoPanel->isTimerEnabled())
-    // {
-    //     infoPanel->stopTimer();
-    // }
-    if (!paused)
-        pause();
+    if (!paused && infoPanel->isTimerEnabled())
+    {
+        infoPanel->stopTimer();
+    }
+
     help->changeToThis();
 }
 
@@ -256,6 +259,7 @@ void GameWindow::pause()
 {
     infoPanel->pause();
     basicMode->getUi()->BtnPause->setText("恢复");
+    basicMode->getUi()->BtnHint->setEnabled(false);
 
     infoPanel->setEnabled(false);
     gameMap->setEnabled(false);
@@ -266,6 +270,7 @@ void GameWindow::resume()
 {
     infoPanel->resume();
     basicMode->getUi()->BtnPause->setText("暂停");
+    basicMode->getUi()->BtnHint->setEnabled(true);
 
     infoPanel->setEnabled(true);
     gameMap->setEnabled(true);

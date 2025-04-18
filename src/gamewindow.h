@@ -49,6 +49,7 @@ protected:
 
 public slots:
     void onBtnBasicClicked();
+    void onBtnZenClicked();
     void onBtnRestartClicked();
     void onBtnBackClicked();    // 用于所有返回的 back 按钮
     void onBtnBackToMenuClicked();  // 用于返回主菜单

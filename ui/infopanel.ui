@@ -28,7 +28,7 @@
     </font>
    </property>
    <property name="text">
-    <string>剩余时间: 240 s</string>
+    <string>剩余时间: +∞ s</string>
    </property>
   </widget>
  </widget>
